@@ -1,0 +1,7 @@
+[Unit]
+Description=Run nft-block.service every 4h
+[Timer]
+OnUnitActiveSec=4h
+RandomizedDelaySec=20min
+[Install]
+WantedBy=timers.target

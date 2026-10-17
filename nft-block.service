@@ -1,0 +1,10 @@
+[Unit]
+Description=Set up nft blocking
+After=network-online.target
+Wants=network-online.target
+Requires=systemd-networkd-wait-online.service
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/nft-block.sh
+[Install]
+WantedBy=multi-user.target
