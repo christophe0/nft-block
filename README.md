@@ -51,6 +51,7 @@ nft -to list table inet block |grep counter
 
 - **IPv4 only** — IPv6 traffic is accepted and not filtered.
 - Brief window during refresh where the ruleset exists but sets are empty.
+- `known-scanners.txt` is currently maintained by hand and may be outdated.
 
 ### Acknowledgements
 
@@ -58,10 +59,12 @@ nft -to list table inet block |grep counter
 - [CTU-AIPP](https://github.com/stratosphereips/AIP)
 - [Duggytuxy Data-Shield](https://github.com/duggytuxy/Data-Shield_IPv4_Blocklist)
 - [IPFire](https://www.ipfire.org/)
-- [jq](https://jqlang.org/)
-- [netfilter](https://www.netfilter.org/)
 - [Spamhaus ASN-DROP](https://www.spamhaus.org/blocklists/do-not-route-or-peer/)
-- [systemd](https://systemd.io/)
+- [jq](https://jqlang.org/), [netfilter](https://www.netfilter.org/), and [systemd](https://systemd.io/)
+
+### AI Usage
+
+**Qwen3.8-27b** and **Qwen3.8-Flash-Next** were used during the development of this project.
 
 ### License
 
