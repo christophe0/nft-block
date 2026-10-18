@@ -22,6 +22,7 @@
 3.151.116.231 scan.visionheight.com
 3.151.194.164 scan.visionheight.com
 3.236.251.82 ai research scanner
+4.148.240.238 azpdwss5msmv.stretchoid.com
 4.148.241.2 stretchoid
 4.249.17.236 stretchoid
 5.63.151.96/27 rapid7
@@ -45,21 +46,26 @@
 20.29.23.130 azpdcgiid2di.stretchoid.com
 20.42.57.189 stretchoid
 20.64.98.51 stretchoid
+20.64.98.81 azpdssvvcg7k.stretchoid.com
 20.64.98.227 stretchoid
+20.64.99.180 azpdssh97wat.stretchoid.com
 20.64.106.28 azpdsg3y2buu.stretchoid.com
 20.65.202.90 stretchoid
 20.65.202.202 stretchoid
 20.65.202.203 stretchoid
-20.64.99.180 azpdssh97wat.stretchoid.com
 20.84.75.121 azpdesyorfgm.stretchoid.com
 20.102.90.23 stretchoid
+20.102.110.158 azpdesnabumh.stretchoid.com
 20.106.33.119 azpdcsnet56i.stretchoid.com
+20.106.177.215 azpdes085iiu.stretchoid.com
+20.106.187.36 azpdegifcz55.stretchoid.com
 20.118.209.123 azpdcs2xgpkg.stretchoid.com
 20.118.241.250 azpdcg13avob.stretchoid.com
 20.121.115.70 stretchoid
 20.127.202.109 azpdegkn7tg2.stretchoid.com
 20.127.220.195 azpdegfr0xrb.stretchoid.com
 20.168.122.104 stretchoid
+20.168.124.45 azpdwsu7m4ze.stretchoid.com
 20.168.127.155 azpdwgep01af.stretchoid.com
 20.169.57.234 azpdwsn8ihql.stretchoid.com
 20.169.58.16 stretchoid
@@ -74,16 +80,21 @@
 34.228.104.231 scan.visionheight.com
 35.162.140.148 ai research scanner
 35.169.206.177 scan.visionheight.com
+40.74.212.22 azpdsgygij80.stretchoid.com
+40.74.212.23 azpdsgbj7pkp.stretchoid.com
+40.90.236.53 azpdegusglki.stretchoid.com
 40.119.45.138 azpdsggo08qo.stretchoid.com
 40.124.117.65 stretchoid
 40.124.123.33 azpdsscm1g4o.stretchoid.com
 40.124.123.178 stretchoid
+40.124.123.211 azpdsg322qms.stretchoid.com
 40.124.172.38 stretchoid
 40.124.173.206 azpdsgcvt7u2.stretchoid.com.
 40.124.185.213 azpdsg3hv6sy.stretchoid.com
 45.79.132.41 warsaw.scan.bufferover.run
 45.79.172.21 riga.scan.bufferover.run.
 45.79.181.179 andorra.scan.bufferover.run
+45.79.190.10 scanner4.labs.rapid7.com
 45.82.76.0/24 Detai Prosperous
 45.91.64.0/24 f6
 45.133.173.0/24 infrawat.ch
@@ -102,6 +113,7 @@
 64.62.156.0/24 shadowserver
 64.62.197.0/24 shadowserver
 64.205.72.0/24 abuseradar netutils
+64.225.78.34 portscanner-ams3-01.prod.cyberresilience.io
 64.226.86.7 donut.scanf.shodan.io
 65.49.1.0/24 shadowserver
 65.49.20.64/26 shadowserver
@@ -111,7 +123,9 @@
 66.132.195.0/24 censys
 66.132.224.0/24 censys
 66.175.212.77 rapid7
+66.175.212.77 scanner5.labs.rapid7.com
 66.228.40.98 lagos.scan.bufferover.run
+66.228.41.127 scanner3.labs.rapid7.com
 66.240.192.138 shodan
 66.240.205.34 malware-hunter.census.shodan.io
 66.240.223.214 cycube.com
@@ -128,13 +142,17 @@
 71.6.142.213 cycube.com
 71.6.147.254 tesla.census.shodan.io
 71.6.154.144 cycube.com
+71.6.158.166 ninja.census.shodan.io
 71.6.199.65 cycube.com
 71.6.199.87 cycube.com
 71.6.202.219 cycube.com
 71.6.233.0/24 rapid7
+71.6.233.2 scanner1.labs.rapid7.com
+71.6.233.129 scanner2.labs.rapid7.com
 74.82.47.0/26 shadowserver
 77.67.26.0/24 abuseradar netutils
 81.19.216.64/26 infrawat.ch
+81.19.219.192/26 infrawat.ch
 85.217.140.0/24 modat
 85.217.149.0/24 modat
 86.38.187.0/24 abuseradar netutils
@@ -212,6 +230,7 @@
 172.202.49.190 azpdcg918vj6.stretchoid.com
 172.212.224.104 azpdcso0dsmg.stretchoid.com
 172.232.137.89 8744084d.scanners.onlyscans.net
+173.255.225.139 scanner6.labs.rapid7.com
 174.138.41.209 ipinfo
 178.128.151.137 ipinfo
 184.105.139.64/26 shadowserver
