@@ -45,6 +45,7 @@
 20.14.94.1 azpdwsjfcbbh.stretchoid.com
 20.29.23.130 azpdcgiid2di.stretchoid.com
 20.42.57.189 stretchoid
+20.55.90.133 azpdegirpl1l.stretchoid.com
 20.64.98.51 stretchoid
 20.64.98.81 azpdssvvcg7k.stretchoid.com
 20.64.98.227 stretchoid
@@ -64,6 +65,7 @@
 20.121.115.70 stretchoid
 20.127.202.109 azpdegkn7tg2.stretchoid.com
 20.127.220.195 azpdegfr0xrb.stretchoid.com
+20.163.13.24 azpdwsg6zlk0.stretchoid.com
 20.168.122.104 stretchoid
 20.168.124.45 azpdwsu7m4ze.stretchoid.com
 20.168.127.155 azpdwgep01af.stretchoid.com
@@ -80,6 +82,7 @@
 34.228.104.231 scan.visionheight.com
 35.162.140.148 ai research scanner
 35.169.206.177 scan.visionheight.com
+40.74.210.112 azpdss8g4p7i.stretchoid.com
 40.74.212.22 azpdsgygij80.stretchoid.com
 40.74.212.23 azpdsgbj7pkp.stretchoid.com
 40.90.236.53 azpdegusglki.stretchoid.com
