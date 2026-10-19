@@ -1,6 +1,6 @@
 # nft-block
 
-This project started for me to **learn nft** and **explore data sources**. It is deliberately
+This project started for me to learn nft and explore data sources. It is deliberately
 simple, not a hardened firewall distribution.
 
 It periodically downloads several public blocklists and loads everything into a single nftables
@@ -31,12 +31,12 @@ malicious IPs.
 
 Two chains live in `table inet block`:
 
-- **`raw-filter`** (prerouting @ `raw` — earliest possible hook):  high-confidence sets
+- `raw-filter` (prerouting @ `raw` — earliest possible hook):  high-confidence sets
   drop immediately; then `tcp dport {25,80,443}` and `udp dport 443` `accept` short-circuit the
   chain so the *dynamic* lists can never lock out legitimate mail/web visitors, while port probes
   to other ports still get blocked. The dynamic lists use separate `counter`-then-`drop` rule pairs
   to measure each list's individual impact.
-- **`proto-filter`** (input @ `filter`, `policy drop`): accepts loopback,
+- `proto-filter` (input @ `filter`, `policy drop`): accepts loopback,
   established/related, ICMP/IGMP/ICMPv6 and all TCP/UDP; anything else (ESP, GRE, stray protocols)
   is logged with the `proto-block:` prefix and dropped.
 
@@ -49,7 +49,7 @@ nft -to list table inet block |grep counter
 
 ### Limitations
 
-- **IPv4 only** — IPv6 traffic is accepted and not filtered.
+- IPv4 only — IPv6 traffic is accepted and not filtered.
 - Brief window during refresh where the ruleset exists but sets are empty.
 - `known-scanners.txt` is currently maintained by hand and may be outdated.
 
