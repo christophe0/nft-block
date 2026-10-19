@@ -53,9 +53,18 @@ nft -to list table inet block |grep counter
 - Brief window during refresh where the ruleset exists but sets are empty.
 - `known-scanners.txt` is currently maintained by hand and may be outdated.
 
+### References
+
+- [`man systemd.service`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html)
+- [Network Configuration Synchronization Points](https://systemd.io/NETWORK_ONLINE/)
+- [`man nft`](https://www.netfilter.org/projects/nftables/manpage.html)
+- [nftables wiki](https://wiki.nftables.org/wiki-nftables/)
+- [Ubuntu nftables documentation](https://documentation.ubuntu.com/security/security-features/network/firewall/nftables/)
+
 ### Acknowledgements
 
 - [AbuseIPDB](https://www.abuseipdb.com/)
+- [bgp.tools](https://bgp.tools/)
 - [CTU-AIPP](https://github.com/stratosphereips/AIP)
 - [Duggytuxy Data-Shield](https://github.com/duggytuxy/Data-Shield_IPv4_Blocklist)
 - [IPFire](https://www.ipfire.org/)
@@ -64,7 +73,7 @@ nft -to list table inet block |grep counter
 
 ### AI Usage
 
-**Qwen3.8-27b** and **Qwen3.8-Flash-Next** were used during the development of this project.
+*Qwen3.8-27b* and *Qwen3.8-Flash-Next* were used during the development of this project.
 
 ### License
 
