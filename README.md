@@ -18,20 +18,20 @@ malicious IPs.
 
 ### Data sources
 
-| Set name | Source | Strategy |
+| Set name | Source | Dropped |
 |---|---|---|
-| `known-scanners` / `-v6` | Local curated list | Dropped unconditionally (IPv4 + IPv6) |
-| `ipfire-override-xd` / `-v6` | IPFire | Dropped unconditionally (IPv4 + IPv6) |
-| `spamhaus-asn` / `-v6` | Spamhaus | Dropped unconditionally (IPv4 + IPv6) |
-| `abuseipdb` / `-v6` | AbuseIPDB | Dropped on non-service ports only (IPv4 + IPv6) |
-| `duggytuxy-data-shield` | Duggytuxy | Dropped on non-service ports only (IPv4) |
-| `ctuaipp` | CTU-AIPP | Dropped on non-service ports only (IPv4) |
+| `known-scanners` / `-v6` | Local curated list | Unconditionally (IPv4 + IPv6) |
+| `ipfire-override-xd` / `-v6` | IPFire | Unconditionally (IPv4 + IPv6) |
+| `spamhaus-asn` / `-v6` | Spamhaus | Unconditionally (IPv4 + IPv6) |
+| `abuseipdb` / `-v6` | AbuseIPDB | On non-service ports only (IPv4 + IPv6) |
+| `duggytuxy-data-shield` | Duggytuxy | On non-service ports only (IPv4) |
+| `ctuaipp` | CTU-AIPP | On non-service ports only (IPv4) |
 
 ### Ruleset structure
 
 Two chains live in `table inet block`:
 
-- `raw-filter` (prerouting @ `raw` — earliest possible hook):  high-confidence sets
+- `raw-filter` (prerouting @ `raw` — earliest possible hook): high-confidence sets
   drop immediately; then `tcp dport {25,80,443}` and `udp dport 443` `accept` short-circuit the
   chain so the *dynamic* lists can never lock out legitimate mail/web visitors, while port probes
   to other ports still get blocked. The dynamic lists use separate `counter`-then-`drop` rule pairs
@@ -71,7 +71,6 @@ nft -to list table inet block |grep counter
 - [Intrisec: ShadowSyndicate Infrastructure Illumination (2025)](https://www.intrinsec.com/wp-content/uploads/2025/10/TLP-CLEAR-31072025-ShadowSyndicate-infrastructure-illumination-EN.pdf)
 - [Internet Weather Report: ASN Watchlist (2025)](https://internetweather.net/asn-watchlist/)
 - [Breakglass: Block One ASN, Kill Sixteen Malware Families (2026)](https://intel.breakglass.tech/post/omegatech-bph-as202412-67-c2-servers-16-malware-families-one-subnet)
-- [ipapi.is: Most Abusive ASNs on the Internet](https://ipapi.is/most-abusive-asn.html)
 
 ### Acknowledgements
 
