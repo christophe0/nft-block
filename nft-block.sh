@@ -120,12 +120,17 @@ table inet block {
     ip saddr @ctuaipp drop;
   }
   chain proto-filter {
-    type filter hook input priority filter; policy drop;
-    iif lo accept; ct state established,related accept;
+    type filter hook input priority filter; policy drop; iif lo accept;
+    ct state established,related accept; ct state invalid drop;
     ether type ip  ip protocol { icmp, igmp } accept;
-    ether type ip  meta l4proto { tcp, udp } accept;
     ether type ip6 ip6 nexthdr icmpv6 accept;
-    ether type ip6 meta l4proto { tcp, udp } accept;
+    tcp dport { 22, 25, 80, 443, 465, 853, 993 } accept;
+    udp dport 443 accept;
+    # DHCPv4 and DHCPv6
+    udp sport 67 udp dport 68 accept; udp sport 68 udp dport 67 accept;
+    udp sport 547 udp dport 546 accept; udp sport 546 udp dport 547 accept;
+    # broadcast/subnet-broadcast noise
+    fib daddr type { broadcast, multicast } counter drop;
     log prefix "proto-block: " counter;
   }
 }

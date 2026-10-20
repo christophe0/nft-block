@@ -36,9 +36,11 @@ Two chains live in `table inet block`:
   chain so the *dynamic* lists can never lock out legitimate mail/web visitors, while port probes
   to other ports still get blocked. The dynamic lists use separate `counter`-then-`drop` rule pairs
   to measure each list's individual impact.
-- `proto-filter` (input @ `filter`, `policy drop`): accepts loopback,
-  established/related, ICMP/IGMP/ICMPv6 and all TCP/UDP; anything else (ESP, GRE, stray protocols)
-  is logged with the `proto-block:` prefix and dropped.
+- `proto-filter` (input @ `filter`, `policy drop`): default-deny port allowlist. Accepts loopback,
+  established/related, ICMP/IGMP/ICMPv6, `tcp dport { 22, 25, 80, 443, 465, 853, 993 }` and
+  `udp dport 443`; anything else (other ports, ESP, GRE, stray protocols) is logged with the
+  `proto-block:` prefix and dropped. Applies to IPv6 as well, so the open port set is identical
+  for both families.
 
 ### Monitoring
 
@@ -49,7 +51,7 @@ nft -to list table inet block |grep counter
 
 ### Limitations
 
-- IPv4 only — IPv6 traffic is accepted and not filtered.
+- Blocklists are IPv4 only — IPv6 gets the port allowlist but no IP-reputation filtering.
 - Brief window during refresh where the ruleset exists but sets are empty.
 - `known-scanners.txt` is currently maintained by hand and may be outdated.
 
