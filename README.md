@@ -51,8 +51,7 @@ nft -to list table inet block |grep counter
 
 ### Limitations
 
-- The dynamic reputation lists (AbuseIPDB, Duggytuxy, CTU-AIPP) are IPv4 only; IPv6 IP-reputation
-  filtering is limited to the curated scanner list and the Spamhaus/IPFire ASN-joined prefixes.
+- The dynamic reputation lists (AbuseIPDB, Duggytuxy, CTU-AIPP) are IPv4 only.
 - Brief window during refresh where the ruleset exists but sets are empty.
 - `known-scanners.txt` is currently maintained by hand and may be outdated.
 
@@ -64,11 +63,21 @@ nft -to list table inet block |grep counter
 - [nftables wiki](https://wiki.nftables.org/wiki-nftables/)
 - [Ubuntu nftables documentation](https://documentation.ubuntu.com/security/security-features/network/firewall/nftables/)
 
+### Further reading
+
+- [Jesper Brouer: DDoS protection Using Netfilter/iptables (2014)](https://people.netfilter.org/hawk/presentations/dknog4/iptables-ddos-mitigation_JesperBrouer.pdf)
+- [Marek Majkowski: Lessons from defending the indefensible (2015)](https://blackhat.com/docs/eu-15/materials/eu-15-Majkowski-Lessons-From-Defending-The-Indefensible.pdf)
+- [Understanding the Mirai Botnet (2017)](https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-antonakakis.pdf)
+- [Intrisec: ShadowSyndicate Infrastructure Illumination (2025)](https://www.intrinsec.com/wp-content/uploads/2025/10/TLP-CLEAR-31072025-ShadowSyndicate-infrastructure-illumination-EN.pdf)
+- [Internet Weather Report: ASN Watchlist (2025)](https://internetweather.net/asn-watchlist/)
+- [Breakglass: Block One ASN, Kill Sixteen Malware Families (2026)](https://intel.breakglass.tech/post/omegatech-bph-as202412-67-c2-servers-16-malware-families-one-subnet)
+- [ipapi.is: Most Abusive ASNs on the Internet](https://ipapi.is/most-abusive-asn.html)
+
 ### Acknowledgements
 
 - [AbuseIPDB](https://www.abuseipdb.com/)
 - [bgp.tools](https://bgp.tools/)
-- [CTU-AIPP](https://github.com/stratosphereips/AIP)
+- [Stratosphere Laboratory CTU-AIPP](https://github.com/stratosphereips/AIP)
 - [Duggytuxy Data-Shield](https://github.com/duggytuxy/Data-Shield_IPv4_Blocklist)
 - [IPFire](https://www.ipfire.org/)
 - [Spamhaus ASN-DROP](https://www.spamhaus.org/blocklists/do-not-route-or-peer/)
@@ -76,8 +85,8 @@ nft -to list table inet block |grep counter
 
 ### AI Usage
 
-*Qwen3.8-27b* and *Qwen3.8-Flash-Next* were used during the development of this project.
+*[Qwen3.8-27b](https://huggingface.co/Qwen/Qwen3.8-27B)* and *[Qwen3.8-Flash-Next](https://qwen.ai/blog?id=qwen3.8-flash-next)* were used via during the development of this project.
 
 ### License
 
-[Apache 2.0](https://opensource.org/license/apache-2.0) Data sources have their own terms.
+[Apache 2.0](https://opensource.org/license/apache-2.0); Data sources have their own terms.
