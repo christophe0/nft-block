@@ -105,6 +105,7 @@
 45.156.128.0/24 internet census
 45.156.129.0/24 internet census
 45.156.130.0/24 internet census
+45.156.131.0/24 internet census
 52.14.58.0/32 scan.cypex.ai
 52.20.198.190 scan.visionheight.com
 52.188.194.84 stretchoid
@@ -125,7 +126,6 @@
 66.132.186.0/24 censys
 66.132.195.0/24 censys
 66.132.224.0/24 censys
-66.175.212.77 rapid7
 66.175.212.77 scanner5.labs.rapid7.com
 66.228.40.98 lagos.scan.bufferover.run
 66.228.41.127 scanner3.labs.rapid7.com
@@ -176,7 +176,11 @@
 104.248.62.205 ipinfo
 104.248.62.233 ipinfo
 108.129.223.196 ai research scanner
+109.105.208.0/24 internet-census
 109.105.209.0/24 internet-census
+109.105.210.0/24 internet-census
+109.105.211.0/24 internet-census
+109.105.212.0/24 internet-census
 134.209.112.125 ipinfo
 135.119.104.245 azpdcgljjwwq.stretchoid.com
 137.184.13.100 gravy.scanf.shodan.io
@@ -205,6 +209,7 @@
 157.230.87.210 ipinfo
 157.230.100.57 internetdata.io
 157.230.232.5 ipinfo
+157.245.72.120 portscanner-ams3-04.prod.cyberresilience.io
 157.245.90.82 ipinfo
 157.245.129.33 ipinfo
 158.94.186.0/23 alphastrike
@@ -235,7 +240,9 @@
 172.232.137.89 8744084d.scanners.onlyscans.net
 173.255.225.139 scanner6.labs.rapid7.com
 174.138.41.209 ipinfo
+178.62.212.177 portscanner-ams3-03.prod.cyberresilience.io
 178.128.151.137 ipinfo
+178.128.251.47 portscanner-ams3-02.prod.cyberresilience.io
 184.105.139.64/26 shadowserver
 184.105.247.192/26 shadowserver
 185.2.80.248/29 modat.io
@@ -273,5 +280,4 @@
 216.117.2.180 shodan.io
 216.180.246.0/24 abuseradar deepfield.net
 216.218.206.64/26 shadowserver
-216.218.206.123 scan-06n.shadowserver.org
 217.146.80.96/27 infrawat.ch
