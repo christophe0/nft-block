@@ -20,12 +20,12 @@ malicious IPs.
 
 | Set name | Source | Strategy |
 |---|---|---|
-| `known-scanners` | Local curated list | Dropped unconditionally |
-| `ipfire-override-xd` | IPFire | Dropped unconditionally |
-| `spamhaus-asn` | Spamhaus | Dropped unconditionally |
-| `abuseipdb` | AbuseIPDB | Dropped on non-service ports only |
-| `duggytuxy-data-shield` | Duggytuxy | Dropped on non-service ports only |
-| `ctuaipp` | CTU-AIPP | Dropped on non-service ports only |
+| `known-scanners` / `-v6` | Local curated list | Dropped unconditionally (IPv4 + IPv6) |
+| `ipfire-override-xd` / `-v6` | IPFire | Dropped unconditionally (IPv4 + IPv6) |
+| `spamhaus-asn` / `-v6` | Spamhaus | Dropped unconditionally (IPv4 + IPv6) |
+| `abuseipdb` | AbuseIPDB | Dropped on non-service ports only (IPv4) |
+| `duggytuxy-data-shield` | Duggytuxy | Dropped on non-service ports only (IPv4) |
+| `ctuaipp` | CTU-AIPP | Dropped on non-service ports only (IPv4) |
 
 ### Ruleset structure
 
@@ -51,7 +51,8 @@ nft -to list table inet block |grep counter
 
 ### Limitations
 
-- Blocklists are IPv4 only — IPv6 gets the port allowlist but no IP-reputation filtering.
+- The dynamic reputation lists (AbuseIPDB, Duggytuxy, CTU-AIPP) are IPv4 only; IPv6 IP-reputation
+  filtering is limited to the curated scanner list and the Spamhaus/IPFire ASN-joined prefixes.
 - Brief window during refresh where the ruleset exists but sets are empty.
 - `known-scanners.txt` is currently maintained by hand and may be outdated.
 

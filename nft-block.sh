@@ -14,12 +14,13 @@ fetch() {
 
 known_scanners="$(dirname "$(readlink -f "$0")")/known-scanners.txt"
 scanners=$(mktemp)
+scanners6=$(mktemp)
 if [[ -f "$known_scanners" ]]; then
-  awk '
+  awk -v V4="$scanners" -v V6="$scanners6" '
     /^[[:space:]]*#/ || !NF { next }
-    $1 !~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/ {
-      print "  [warn] bad line in known-scanners: " $0 > "/dev/stderr"; next }
-    { print $1 }' "$known_scanners" >"$scanners"
+    $1 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/ { print $1 >> V4; next }
+    $1 ~ /^[0-9A-Fa-f]+:[0-9A-Fa-f:]+(\/[0-9]+)?$/     { print $1 >> V6; next }
+    { print "  [warn] bad line in known-scanners: " $0 > "/dev/stderr" }' "$known_scanners"
 else
   echo "[warn] known scanners list not found: $known_scanners" >&2
 fi
@@ -27,14 +28,17 @@ fi
 duggytuxy=$(mktemp)
 ctuaipp=$(mktemp)
 spamhaus_asn=$(mktemp)
+spamhaus_asn6=$(mktemp)
 spamhaus_asns=$(mktemp)
 bgptable=$(mktemp)
 ipfirexd=$(mktemp)
 ipfireasns=$(mktemp)
 ipfirenets=$(mktemp)
+ipfirenets6=$(mktemp)
 ipfireasn=$(mktemp)
+ipfireasn6=$(mktemp)
 abuseipdb=$(mktemp)
-trap 'rm -f "$scanners" "$spamhaus_asn" "$spamhaus_asns" "$bgptable" "$ipfirexd" "$ipfireasns" "$ipfirenets" "$ipfireasn" "$abuseipdb" "$ctuaipp" "$duggytuxy"' EXIT
+trap 'rm -f "$scanners" "$scanners6" "$spamhaus_asn" "$spamhaus_asn6" "$spamhaus_asns" "$bgptable" "$ipfirexd" "$ipfireasns" "$ipfirenets" "$ipfirenets6" "$ipfireasn" "$ipfireasn6" "$abuseipdb" "$ctuaipp" "$duggytuxy"' EXIT
 
 fetch "duggytuxy"   "$duggytuxy"   bash -c "wget --secure-protocol=TLSv1_3 -qO- 'https://raw.githubusercontent.com/duggytuxy/Data-Shield_IPv4_Blocklist/refs/heads/main/prod_data-shield_ipv4_blocklist.txt' | grep -Exo '([0-9]{1,3}\.){3}[0-9]{1,3}'"
 fetch "ctuaipp"     "$ctuaipp"     bash -c "wget --secure-protocol=TLSv1_3 -qO- 'https://mcfp.felk.cvut.cz/publicDatasets/CTU-AIPP-BlackList/Todays-Blacklists/AIP_blacklist_for_IPs_seen_last_24_hours.csv' | grep -Exo '([0-9]{1,3}\.){3}[0-9]{1,3}'"
@@ -47,17 +51,28 @@ if [[ -s "$spamhaus_asns" && -s "$bgptable" ]]; then
     "$spamhaus_asns" "$bgptable" | sort -u >"$spamhaus_asn"
   echo "[ok] spamhaus-asn ($(wc -l <"$spamhaus_asn") prefixes from $(wc -l <"$spamhaus_asns") ASNs)"
 fi
+# join: IPv6 prefixes from the bgp.tools routing table whose ASN is in the Spamhaus ASN-DROP list
+if [[ -s "$spamhaus_asns" && -s "$bgptable" ]]; then
+  awk 'NR==FNR { a[$1]=1; next }
+       ($2 in a) && ($1 ~ /^[0-9A-Fa-f]+:[0-9A-Fa-f:]*\/[0-9]+$/) { print $1 }' \
+    "$spamhaus_asns" "$bgptable" | sort -u >"$spamhaus_asn6"
+  echo "[ok] spamhaus-asn-v6 ($(wc -l <"$spamhaus_asn6") prefixes)"
+fi
 fetch "abuseipdb"   "$abuseipdb"   bash -c "wget --secure-protocol=TLSv1_3 -qO- 'https://cdn.jsdelivr.net/gh/LittleJake/ip-blacklist/abuseipdb_blacklist_ip_score_75.txt' | grep -v ':'"
 fetch "ipfire-override-xd" "$ipfirexd" wget --secure-protocol=TLSv1_3 -qO- 'https://git.ipfire.org/?p=location/location-database.git;a=blob_plain;f=overrides/override-xd.txt'
-# extract drop:yes ASNs (strip "AS" prefix) and direct IPv4 net: prefixes from override-xd
+# extract drop:yes ASNs (strip "AS" prefix) and direct IPv4/IPv6 net: prefixes from override-xd
 if [[ -s "$ipfirexd" ]]; then
   awk '
     /^aut-num:[[:space:]]+AS[0-9]+/ { cur = $2; sub(/^AS/, "", cur); rec = cur; next }
-    /^net:[[:space:]]+/             { rec = ""; net = $2; if (net ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/) print net > NETS; next }
+    /^net:[[:space:]]+/ {
+      rec = ""; net = $2
+      if (net ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/)          print net > NETS
+      else if (net ~ /^[0-9A-Fa-f]+:[0-9A-Fa-f:]*\/[0-9]+$/)           print net > NETS6
+      next }
     /^drop:[[:space:]]+yes/ {
       if (rec != "") print rec > ASNS;
       rec = "" }
-  ' ASNS="$ipfireasns" NETS="$ipfirenets" "$ipfirexd"
+  ' ASNS="$ipfireasns" NETS="$ipfirenets" NETS6="$ipfirenets6" "$ipfirexd"
 fi
 # join: IPv4 prefixes from the bgp.tools routing table whose ASN is in the IPFire override-xd drop list
 if [[ -s "$ipfireasns" && -s "$bgptable" ]]; then
@@ -68,6 +83,16 @@ if [[ -s "$ipfireasns" && -s "$bgptable" ]]; then
     [[ -s "$ipfirenets" ]] && cat "$ipfirenets"
   } | sort -u >"$ipfireasn"
   echo "[ok] ipfire-override-xd ($(wc -l <"$ipfireasn") prefixes from $(wc -l <"$ipfireasns") ASNs + $(wc -l <"$ipfirenets" 2>/dev/null || echo 0) direct nets)"
+fi
+# join: IPv6 prefixes from the bgp.tools routing table whose ASN is in the IPFire override-xd drop list
+if [[ -s "$ipfireasns" && -s "$bgptable" ]]; then
+  {
+    awk 'NR==FNR { a[$1]=1; next }
+         ($2 in a) && ($1 ~ /^[0-9A-Fa-f]+:[0-9A-Fa-f:]*\/[0-9]+$/) { print $1 }' \
+      "$ipfireasns" "$bgptable"
+    [[ -s "$ipfirenets6" ]] && cat "$ipfirenets6"
+  } | sort -u >"$ipfireasn6"
+  echo "[ok] ipfire-override-xd-v6 ($(wc -l <"$ipfireasn6") prefixes)"
 fi
 
 nft -f- <<EOF
@@ -104,11 +129,29 @@ table inet block {
     flags interval
     auto-merge
   }
+  set known-scanners-v6 {
+    type ipv6_addr
+    flags interval
+    auto-merge
+  }
+  set spamhaus-asn-v6 {
+    type ipv6_addr
+    flags interval
+    auto-merge
+  }
+  set ipfire-override-xd-v6 {
+    type ipv6_addr
+    flags interval
+    auto-merge
+  }
   chain raw-filter {
     type filter hook prerouting priority raw;
     ip saddr @known-scanners counter drop;
     ip saddr @ipfire-override-xd counter drop;
     ip saddr @spamhaus-asn counter drop;
+    ip6 saddr @known-scanners-v6 counter drop;
+    ip6 saddr @ipfire-override-xd-v6 counter drop;
+    ip6 saddr @spamhaus-asn-v6 counter drop;
     tcp dport { 25, 80, 443 } accept;
     udp dport 443 accept;
     # separate counter and drop to measure individual impacts
@@ -136,17 +179,25 @@ table inet block {
 }
 EOF
 
-for set_name in known-scanners duggytuxy-data-shield ctuaipp abuseipdb spamhaus-asn ipfire-override-xd; do
+for set_name in known-scanners known-scanners-v6 duggytuxy-data-shield ctuaipp abuseipdb \
+                spamhaus-asn spamhaus-asn-v6 ipfire-override-xd ipfire-override-xd-v6; do
   case "$set_name" in
     known-scanners) src_file="$scanners" ;;
+    known-scanners-v6) src_file="$scanners6" ;;
     duggytuxy-data-shield) src_file="$duggytuxy" ;;
     ctuaipp) src_file="$ctuaipp" ;;
     abuseipdb) src_file="$abuseipdb" ;;
     spamhaus-asn) src_file="$spamhaus_asn" ;;
+    spamhaus-asn-v6) src_file="$spamhaus_asn6" ;;
     ipfire-override-xd) src_file="$ipfireasn" ;;
+    ipfire-override-xd-v6) src_file="$ipfireasn6" ;;
   esac
   [[ -s "$src_file" ]] || continue
-  readarray -t ips < <(grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(/[0-9]+)?$' "$src_file")
+  case "$set_name" in
+    *-v6) pattern='^[0-9A-Fa-f]+:[0-9A-Fa-f:]+(/[0-9]+)?$' ;;
+    *)    pattern='^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(/[0-9]+)?$' ;;
+  esac
+  readarray -t ips < <(grep -E "$pattern" "$src_file")
   for ((i=0; i<${#ips[@]}; i+=20000)); do
     batch=("${ips[@]:$i:20000}")
     batch_with_commas=$(IFS=','; echo "${batch[*]}")
