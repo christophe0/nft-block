@@ -23,7 +23,7 @@ malicious IPs.
 | `known-scanners` / `-v6` | Local curated list | Dropped unconditionally (IPv4 + IPv6) |
 | `ipfire-override-xd` / `-v6` | IPFire | Dropped unconditionally (IPv4 + IPv6) |
 | `spamhaus-asn` / `-v6` | Spamhaus | Dropped unconditionally (IPv4 + IPv6) |
-| `abuseipdb` | AbuseIPDB | Dropped on non-service ports only (IPv4) |
+| `abuseipdb` / `-v6` | AbuseIPDB | Dropped on non-service ports only (IPv4 + IPv6) |
 | `duggytuxy-data-shield` | Duggytuxy | Dropped on non-service ports only (IPv4) |
 | `ctuaipp` | CTU-AIPP | Dropped on non-service ports only (IPv4) |
 
@@ -51,7 +51,7 @@ nft -to list table inet block |grep counter
 
 ### Limitations
 
-- The dynamic reputation lists (AbuseIPDB, Duggytuxy, CTU-AIPP) are IPv4 only.
+- The dynamic reputation lists (Duggytuxy, CTU-AIPP) are IPv4 only; AbuseIPDB covers both families.
 - Brief window during refresh where the ruleset exists but sets are empty.
 - `known-scanners.txt` is currently maintained by hand and may be outdated.
 

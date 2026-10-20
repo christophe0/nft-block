@@ -38,7 +38,9 @@ ipfirenets6=$(mktemp)
 ipfireasn=$(mktemp)
 ipfireasn6=$(mktemp)
 abuseipdb=$(mktemp)
-trap 'rm -f "$scanners" "$scanners6" "$spamhaus_asn" "$spamhaus_asn6" "$spamhaus_asns" "$bgptable" "$ipfirexd" "$ipfireasns" "$ipfirenets" "$ipfirenets6" "$ipfireasn" "$ipfireasn6" "$abuseipdb" "$ctuaipp" "$duggytuxy"' EXIT
+abuseipdb6=$(mktemp)
+abuseipdb_raw=$(mktemp)
+trap 'rm -f "$scanners" "$scanners6" "$spamhaus_asn" "$spamhaus_asn6" "$spamhaus_asns" "$bgptable" "$ipfirexd" "$ipfireasns" "$ipfirenets" "$ipfirenets6" "$ipfireasn" "$ipfireasn6" "$abuseipdb" "$abuseipdb6" "$abuseipdb_raw" "$ctuaipp" "$duggytuxy"' EXIT
 
 fetch "duggytuxy"   "$duggytuxy"   bash -c "wget --secure-protocol=TLSv1_3 -qO- 'https://raw.githubusercontent.com/duggytuxy/Data-Shield_IPv4_Blocklist/refs/heads/main/prod_data-shield_ipv4_blocklist.txt' | grep -Exo '([0-9]{1,3}\.){3}[0-9]{1,3}'"
 fetch "ctuaipp"     "$ctuaipp"     bash -c "wget --secure-protocol=TLSv1_3 -qO- 'https://mcfp.felk.cvut.cz/publicDatasets/CTU-AIPP-BlackList/Todays-Blacklists/AIP_blacklist_for_IPs_seen_last_24_hours.csv' | grep -Exo '([0-9]{1,3}\.){3}[0-9]{1,3}'"
@@ -58,7 +60,14 @@ if [[ -s "$spamhaus_asns" && -s "$bgptable" ]]; then
     "$spamhaus_asns" "$bgptable" | sort -u >"$spamhaus_asn6"
   echo "[ok] spamhaus-asn-v6 ($(wc -l <"$spamhaus_asn6") prefixes)"
 fi
-fetch "abuseipdb"   "$abuseipdb"   bash -c "wget --secure-protocol=TLSv1_3 -qO- 'https://cdn.jsdelivr.net/gh/LittleJake/ip-blacklist/abuseipdb_blacklist_ip_score_75.txt' | grep -v ':'"
+fetch "abuseipdb"   "$abuseipdb_raw" wget --secure-protocol=TLSv1_3 -qO- 'https://cdn.jsdelivr.net/gh/LittleJake/ip-blacklist/abuseipdb_blacklist_ip_score_75.txt'
+# split the mixed feed into validated IPv4 and IPv6 entries
+if [[ -s "$abuseipdb_raw" ]]; then
+  awk -v V4="$abuseipdb" -v V6="$abuseipdb6" '
+    /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/ { print > V4; next }
+    /^[0-9A-Fa-f]+:[0-9A-Fa-f:]+(\/[0-9]+)?$/     { print > V6; next }' "$abuseipdb_raw"
+  echo "[ok] abuseipdb split ($(wc -l <"$abuseipdb" 2>/dev/null || echo 0) v4 + $(wc -l <"$abuseipdb6" 2>/dev/null || echo 0) v6)"
+fi
 fetch "ipfire-override-xd" "$ipfirexd" wget --secure-protocol=TLSv1_3 -qO- 'https://git.ipfire.org/?p=location/location-database.git;a=blob_plain;f=overrides/override-xd.txt'
 # extract drop:yes ASNs (strip "AS" prefix) and direct IPv4/IPv6 net: prefixes from override-xd
 if [[ -s "$ipfirexd" ]]; then
@@ -144,6 +153,11 @@ table inet block {
     flags interval
     auto-merge
   }
+  set abuseipdb-v6 {
+    type ipv6_addr
+    flags interval
+    auto-merge
+  }
   chain raw-filter {
     type filter hook prerouting priority raw;
     ip saddr @known-scanners counter drop;
@@ -156,9 +170,11 @@ table inet block {
     udp dport 443 accept;
     # separate counter and drop to measure individual impacts
     ip saddr @abuseipdb counter;
+    ip6 saddr @abuseipdb-v6 counter;
     ip saddr @duggytuxy-data-shield counter;
     ip saddr @ctuaipp counter;
     ip saddr @abuseipdb drop;
+    ip6 saddr @abuseipdb-v6 drop;
     ip saddr @duggytuxy-data-shield drop;
     ip saddr @ctuaipp drop;
   }
@@ -179,7 +195,7 @@ table inet block {
 }
 EOF
 
-for set_name in known-scanners known-scanners-v6 duggytuxy-data-shield ctuaipp abuseipdb \
+for set_name in known-scanners known-scanners-v6 duggytuxy-data-shield ctuaipp abuseipdb abuseipdb-v6 \
                 spamhaus-asn spamhaus-asn-v6 ipfire-override-xd ipfire-override-xd-v6; do
   case "$set_name" in
     known-scanners) src_file="$scanners" ;;
@@ -187,6 +203,7 @@ for set_name in known-scanners known-scanners-v6 duggytuxy-data-shield ctuaipp a
     duggytuxy-data-shield) src_file="$duggytuxy" ;;
     ctuaipp) src_file="$ctuaipp" ;;
     abuseipdb) src_file="$abuseipdb" ;;
+    abuseipdb-v6) src_file="$abuseipdb6" ;;
     spamhaus-asn) src_file="$spamhaus_asn" ;;
     spamhaus-asn-v6) src_file="$spamhaus_asn6" ;;
     ipfire-override-xd) src_file="$ipfireasn" ;;
