@@ -84,18 +84,17 @@ net.ipv4.conf.default.send_redirects = 0
 - Rate-limiting isn't implemented: there are no nft `limit` rules.
 - The dynamic reputation lists (Duggytuxy, CTU-AIPP) are IPv4 only; AbuseIPDB covers both families.
 - Brief window during refresh where the ruleset exists but sets are empty.
-- `known-scanners.txt` is currently maintained by hand and may be outdated.
+- `known-scanners` is currently maintained by hand and may be outdated.
 
 ### References
 
 - [`man systemd.service`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html)
 - [systemd Network Configuration Synchronization Points](https://systemd.io/NETWORK_ONLINE/)
-- [`man nft`](https://www.netfilter.org/projects/nftables/manpage.html)
-- [nftables wiki](https://wiki.nftables.org/wiki-nftables/)
-- [Ubuntu nftables documentation](https://documentation.ubuntu.com/security/security-features/network/firewall/nftables/)
+- [`man nft`](https://www.netfilter.org/projects/nftables/manpage.html), [nftables wiki](https://wiki.nftables.org/wiki-nftables/), and [Ubuntu nftables documentation](https://documentation.ubuntu.com/security/security-features/network/firewall/nftables/)
 
 ### Further reading
 
+- [Vincent Bernat: Coping with the TCP TIME-WAIT state on busy Linux servers (2014)](https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux)
 - [Jesper Brouer: DDoS protection Using Netfilter/iptables (2014)](https://people.netfilter.org/hawk/presentations/dknog4/iptables-ddos-mitigation_JesperBrouer.pdf)
 - [Marek Majkowski: Lessons from defending the indefensible (2015)](https://blackhat.com/docs/eu-15/materials/eu-15-Majkowski-Lessons-From-Defending-The-Indefensible.pdf)
 - [Marek Majkowski: Path MTU discovery in practice (2015)](https://blog.cloudflare.com/path-mtu-discovery-in-practice)
@@ -106,6 +105,7 @@ net.ipv4.conf.default.send_redirects = 0
 - [Intrisec: ShadowSyndicate Infrastructure Illumination (2025)](https://www.intrinsec.com/wp-content/uploads/2025/10/TLP-CLEAR-31072025-ShadowSyndicate-infrastructure-illumination-EN.pdf)
 - [Internet Weather Report: ASN Watchlist (2025)](https://internetweather.net/asn-watchlist/)
 - [Breakglass: Block One ASN, Kill Sixteen Malware Families (2026)](https://intel.breakglass.tech/post/omegatech-bph-as202412-67-c2-servers-16-malware-families-one-subnet)
+- [Bob Rudis: Bulletproof Hosting Watch (2026)](https://ai.rud.is/tags/bulletproof/)
 
 ### Acknowledgements
 
