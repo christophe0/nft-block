@@ -1,15 +1,15 @@
 # nft-block
 
-This project started for me to learn nft and explore data sources. It is deliberately
+This project started for me to learn nft and explore blocklists. It is deliberately
 simple, not a hardened firewall distribution.
 
-It periodically downloads several public blocklists and loads everything into a single nftables
+It periodically downloads several public lists and loads everything into a single nftables
 ruleset that drops traffic from known internet-wide scanners, abuse-heavy ASNs, and reported
 malicious IPs.
 
 ### Files
 
-| File | Purpose |
+| Name | Purpose |
 |---|---|
 | [`nft-block.sh`](nft-block.sh) | Fetches blocklists, builds and loads the nftables ruleset |
 | [`known-scanners.txt`](known-scanners.txt) | Hand-maintained list of research scanners (Shodan, Censys, Stretchoid, ...) |
@@ -21,11 +21,11 @@ malicious IPs.
 | Set name | Source | Dropped |
 |---|---|---|
 | `known-scanners` / `-v6` | Local curated list | Unconditionally (IPv4 + IPv6) |
-| `ipfire-override-xd` / `-v6` | IPFire | Unconditionally (IPv4 + IPv6) |
-| `spamhaus-asn` / `-v6` | Spamhaus | Unconditionally (IPv4 + IPv6) |
-| `abuseipdb` / `-v6` | AbuseIPDB | On non-service ports only (IPv4 + IPv6) |
-| `duggytuxy-data-shield` | Duggytuxy | On non-service ports only (IPv4) |
-| `ctuaipp` | CTU-AIPP | On non-service ports only (IPv4) |
+| `ipfire-override-xd` / `-v6` | [IPFire override-xd](https://git.ipfire.org/?p=location/location-database.git;a=blob_plain;f=overrides/override-xd.txt) | Unconditionally (IPv4 + IPv6) |
+| `spamhaus-asn` / `-v6` | [Spamhaus ASN-DROP](https://www.spamhaus.org/blocklists/do-not-route-or-peer/) | Unconditionally (IPv4 + IPv6) |
+| `abuseipdb` / `-v6` | [AbuseIPDB](https://www.abuseipdb.com/) | Non-service ports only (IPv4 + IPv6) |
+| `duggytuxy-data-shield` | [duggytuxy Data-Shield](https://github.com/duggytuxy/Data-Shield_IPv4_Blocklist) | Non-service ports only (IPv4) |
+| `ctuaipp` | [Stratosphere Laboratory CTU-AIPP](https://mcfp.felk.cvut.cz/publicDatasets/CTU-AIPP-BlackList/) | Non-service ports only (IPv4) |
 
 ### Ruleset structure
 
@@ -109,17 +109,13 @@ net.ipv4.conf.default.send_redirects = 0
 
 ### Acknowledgements
 
-- [AbuseIPDB](https://www.abuseipdb.com/)
 - [bgp.tools](https://bgp.tools/)
-- [Stratosphere Laboratory CTU-AIPP](https://github.com/stratosphereips/AIP)
-- [Duggytuxy Data-Shield](https://github.com/duggytuxy/Data-Shield_IPv4_Blocklist)
-- [IPFire override-xd](https://www.ipfire.org/)
-- [Spamhaus ASN-DROP](https://www.spamhaus.org/blocklists/do-not-route-or-peer/)
+- [Pulsedive](https://pulsedive.com/)
 - [jq](https://jqlang.org/), [netfilter](https://www.netfilter.org/), and [systemd](https://systemd.io/)
 
 ### AI Usage
 
-[Qwen3.8-27b](https://huggingface.co/Qwen/Qwen3.8-27B) and [Qwen3.8-Flash-Next](https://qwen.ai/blog?id=qwen3.8-flash-next) were used.
+[Qwen3.8-27b](https://huggingface.co/Qwen/Qwen3.8-27B) and [Qwen3.8-Flash-Next](https://qwen.ai/blog?id=qwen3.8-flash-next)
 
 ### License
 
