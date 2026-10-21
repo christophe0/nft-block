@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+production=0
+for arg in "$@"; do
+  case "$arg" in
+    --production) production=1 ;;
+    *) echo "usage: $(basename "$0") [--production]" >&2; exit 1 ;;
+  esac
+done
+
 fetch() {
   local name="$1"; shift
   local out="$1"; shift
@@ -15,7 +23,9 @@ fetch() {
 known_scanners="$(dirname "$(readlink -f "$0")")/known-scanners.txt"
 scanners=$(mktemp)
 scanners6=$(mktemp)
-if [[ -f "$known_scanners" ]]; then
+if [[ "$production" -eq 1 ]]; then
+  echo "[skip] known-scanners (production mode)"
+elif [[ -f "$known_scanners" ]]; then
   awk -v V4="$scanners" -v V6="$scanners6" '
     /^[[:space:]]*#/ || !NF { next }
     $1 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/ { print $1 >> V4; next }
@@ -104,15 +114,35 @@ if [[ -s "$ipfireasns" && -s "$bgptable" ]]; then
   echo "[ok] ipfire-override-xd-v6 ($(wc -l <"$ipfireasn6") prefixes)"
 fi
 
-nft -f- <<EOF
-table inet block
-delete table inet block
-table inet block {
-  set known-scanners {
+if [[ "$production" -eq 1 ]]; then
+  known_scanners_sets=""
+  known_scanners_rules=""
+  # without proto-block logging, broadcast/multicast noise needs no explicit
+  # drop either: the chain's policy drop already handles it silently
+  noise_and_log=""
+else
+  known_scanners_sets='  set known-scanners {
     type ipv4_addr
     flags interval
     auto-merge
   }
+  set known-scanners-v6 {
+    type ipv6_addr
+    flags interval
+    auto-merge
+  }'
+  known_scanners_rules='    ip saddr @known-scanners counter drop;
+    ip6 saddr @known-scanners-v6 counter drop;'
+  noise_and_log='    # broadcast/subnet-broadcast noise
+    fib daddr type { broadcast, multicast } counter drop;
+    log prefix "proto-block: " counter;'
+fi
+
+nft -f- <<EOF
+table inet block
+delete table inet block
+table inet block {
+$known_scanners_sets
   set duggytuxy-data-shield {
     type ipv4_addr
     flags interval
@@ -138,11 +168,6 @@ table inet block {
     flags interval
     auto-merge
   }
-  set known-scanners-v6 {
-    type ipv6_addr
-    flags interval
-    auto-merge
-  }
   set spamhaus-asn-v6 {
     type ipv6_addr
     flags interval
@@ -160,10 +185,9 @@ table inet block {
   }
   chain raw-filter {
     type filter hook prerouting priority raw;
-    ip saddr @known-scanners counter drop;
+$known_scanners_rules
     ip saddr @ipfire-override-xd counter drop;
     ip saddr @spamhaus-asn counter drop;
-    ip6 saddr @known-scanners-v6 counter drop;
     ip6 saddr @ipfire-override-xd-v6 counter drop;
     ip6 saddr @spamhaus-asn-v6 counter drop;
     tcp dport { 25, 80, 443 } accept;
@@ -188,15 +212,17 @@ table inet block {
     # DHCPv4 and DHCPv6
     udp sport 67 udp dport 68 accept; udp sport 68 udp dport 67 accept;
     udp sport 547 udp dport 546 accept; udp sport 546 udp dport 547 accept;
-    # broadcast/subnet-broadcast noise
-    fib daddr type { broadcast, multicast } counter drop;
-    log prefix "proto-block: " counter;
+$noise_and_log
   }
 }
 EOF
 
-for set_name in known-scanners known-scanners-v6 duggytuxy-data-shield ctuaipp abuseipdb abuseipdb-v6 \
-                spamhaus-asn spamhaus-asn-v6 ipfire-override-xd ipfire-override-xd-v6; do
+set_names=(duggytuxy-data-shield ctuaipp abuseipdb abuseipdb-v6 \
+           spamhaus-asn spamhaus-asn-v6 ipfire-override-xd ipfire-override-xd-v6)
+if [[ "$production" -ne 1 ]]; then
+  set_names=(known-scanners known-scanners-v6 "${set_names[@]}")
+fi
+for set_name in "${set_names[@]}"; do
   case "$set_name" in
     known-scanners) src_file="$scanners" ;;
     known-scanners-v6) src_file="$scanners6" ;;
