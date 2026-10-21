@@ -47,10 +47,41 @@ Two chains live in `table inet block`:
 ```sh
 systemctl status nft-block
 nft -to list table inet block |grep counter
+nstat
+conntrack -L
+```
+
+### Suggested sysctl settings
+
+Drop them into `/etc/sysctl.d/99-nft-block.conf` and apply with `sysctl --system`:
+
+```conf
+# anti-DoS
+net.ipv4.tcp_synack_retries = 2           # syn flood
+net.netfilter.nf_conntrack_tcp_loose = 0  # ack flood
+net.ipv4.tcp_min_snd_mss = 536            # CVE-2019-11479
+
+# path mtu / congestion friendliness
+net.ipv4.tcp_ecn = 1                      # RFC 8087
+net.ipv4.tcp_mtu_probing = 1              # RFC 4821
+net.ipv4.tcp_shrink_window = 1            # RFC 7323
+
+# spoofing and routing hygiene
+net.ipv4.conf.all.rp_filter = 1           # RFC 3704
+net.ipv4.conf.default.rp_filter = 1       # RFC 3704
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv4.conf.all.secure_redirects = 0
+net.ipv4.conf.default.secure_redirects = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
 ```
 
 ### Limitations
 
+- Rate-limiting isn't implemented: there are no nft `limit` rules.
 - The dynamic reputation lists (Duggytuxy, CTU-AIPP) are IPv4 only; AbuseIPDB covers both families.
 - Brief window during refresh where the ruleset exists but sets are empty.
 - `known-scanners.txt` is currently maintained by hand and may be outdated.
@@ -58,7 +89,7 @@ nft -to list table inet block |grep counter
 ### References
 
 - [`man systemd.service`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html)
-- [Network Configuration Synchronization Points](https://systemd.io/NETWORK_ONLINE/)
+- [systemd Network Configuration Synchronization Points](https://systemd.io/NETWORK_ONLINE/)
 - [`man nft`](https://www.netfilter.org/projects/nftables/manpage.html)
 - [nftables wiki](https://wiki.nftables.org/wiki-nftables/)
 - [Ubuntu nftables documentation](https://documentation.ubuntu.com/security/security-features/network/firewall/nftables/)
@@ -67,7 +98,11 @@ nft -to list table inet block |grep counter
 
 - [Jesper Brouer: DDoS protection Using Netfilter/iptables (2014)](https://people.netfilter.org/hawk/presentations/dknog4/iptables-ddos-mitigation_JesperBrouer.pdf)
 - [Marek Majkowski: Lessons from defending the indefensible (2015)](https://blackhat.com/docs/eu-15/materials/eu-15-Majkowski-Lessons-From-Defending-The-Indefensible.pdf)
+- [Marek Majkowski: Path MTU discovery in practice (2015)](https://blog.cloudflare.com/path-mtu-discovery-in-practice)
 - [Understanding the Mirai Botnet (2017)](https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-antonakakis.pdf)
+- [Marek Majkowski: SYN packet handling in the wild (2018)](https://blog.cloudflare.com/syn-packet-handling-in-the-wild)
+- [Marek Majkowski: Conntrack tales - one thousand and one flows (2020)](https://blog.cloudflare.com/conntrack-tales-one-thousand-and-one-flows/)
+- [Mike Freemon: Unbounded memory usage by TCP for receive buffers, and how we fixed it (2023)](https://blog.cloudflare.com/unbounded-memory-usage-by-tcp-for-receive-buffers-and-how-we-fixed-it/)
 - [Intrisec: ShadowSyndicate Infrastructure Illumination (2025)](https://www.intrinsec.com/wp-content/uploads/2025/10/TLP-CLEAR-31072025-ShadowSyndicate-infrastructure-illumination-EN.pdf)
 - [Internet Weather Report: ASN Watchlist (2025)](https://internetweather.net/asn-watchlist/)
 - [Breakglass: Block One ASN, Kill Sixteen Malware Families (2026)](https://intel.breakglass.tech/post/omegatech-bph-as202412-67-c2-servers-16-malware-families-one-subnet)
@@ -78,13 +113,13 @@ nft -to list table inet block |grep counter
 - [bgp.tools](https://bgp.tools/)
 - [Stratosphere Laboratory CTU-AIPP](https://github.com/stratosphereips/AIP)
 - [Duggytuxy Data-Shield](https://github.com/duggytuxy/Data-Shield_IPv4_Blocklist)
-- [IPFire](https://www.ipfire.org/)
+- [IPFire override-xd](https://www.ipfire.org/)
 - [Spamhaus ASN-DROP](https://www.spamhaus.org/blocklists/do-not-route-or-peer/)
 - [jq](https://jqlang.org/), [netfilter](https://www.netfilter.org/), and [systemd](https://systemd.io/)
 
 ### AI Usage
 
-*[Qwen3.8-27b](https://huggingface.co/Qwen/Qwen3.8-27B)* and *[Qwen3.8-Flash-Next](https://qwen.ai/blog?id=qwen3.8-flash-next)* were used via during the development of this project.
+[Qwen3.8-27b](https://huggingface.co/Qwen/Qwen3.8-27B) and [Qwen3.8-Flash-Next](https://qwen.ai/blog?id=qwen3.8-flash-next) were used.
 
 ### License
 
