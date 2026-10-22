@@ -1,6 +1,6 @@
 # nft-block
 
-This project started for me to learn nft and explore blocklists. It is deliberately
+This project started for me to learn nft syntax and explore blocklists. It is deliberately
 simple, not a hardened firewall distribution.
 
 It periodically downloads several public lists and loads everything into a single nftables
@@ -62,9 +62,9 @@ net.netfilter.nf_conntrack_tcp_loose = 0  # ack flood
 net.ipv4.tcp_min_snd_mss = 536            # CVE-2019-11479
 
 # path mtu / congestion friendliness
-net.ipv4.tcp_ecn = 1                      # RFC 8087
 net.ipv4.tcp_mtu_probing = 1              # RFC 4821
 net.ipv4.tcp_shrink_window = 1            # RFC 7323
+net.ipv4.tcp_ecn = 1                      # RFC 8087
 ```
 
 ### Limitations
@@ -76,8 +76,7 @@ net.ipv4.tcp_shrink_window = 1            # RFC 7323
 
 ### References
 
-- [`man systemd.service`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html)
-- [systemd Network Configuration Synchronization Points](https://systemd.io/NETWORK_ONLINE/)
+- [`man systemd.service`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html), [systemd NETWORK_ONLINE](https://systemd.io/NETWORK_ONLINE/)
 - [`man nft`](https://www.netfilter.org/projects/nftables/manpage.html), [nftables wiki](https://wiki.nftables.org/wiki-nftables/), and [Ubuntu nftables documentation](https://documentation.ubuntu.com/security/security-features/network/firewall/nftables/)
 - [jq](https://jqlang.org/), [netfilter](https://www.netfilter.org/), and [systemd](https://systemd.io/)
 - [bgp.tools](https://bgp.tools/) and [Pulsedive](https://pulsedive.com/)
