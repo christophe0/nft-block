@@ -94,18 +94,22 @@ net.ipv4.conf.default.send_redirects = 0
 
 ### Further reading
 
-- [Vincent Bernat: Coping with the TCP TIME-WAIT state on busy Linux servers (2014)](https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux)
-- [Jesper Brouer: DDoS protection Using Netfilter/iptables (2014)](https://people.netfilter.org/hawk/presentations/dknog4/iptables-ddos-mitigation_JesperBrouer.pdf)
-- [Marek Majkowski: Lessons from defending the indefensible (2015)](https://blackhat.com/docs/eu-15/materials/eu-15-Majkowski-Lessons-From-Defending-The-Indefensible.pdf)
-- [Marek Majkowski: Path MTU discovery in practice (2015)](https://blog.cloudflare.com/path-mtu-discovery-in-practice)
-- [Understanding the Mirai Botnet (2017)](https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-antonakakis.pdf)
-- [Marek Majkowski: SYN packet handling in the wild (2018)](https://blog.cloudflare.com/syn-packet-handling-in-the-wild)
-- [Marek Majkowski: Conntrack tales - one thousand and one flows (2020)](https://blog.cloudflare.com/conntrack-tales-one-thousand-and-one-flows/)
-- [Mike Freemon: Unbounded memory usage by TCP for receive buffers, and how we fixed it (2023)](https://blog.cloudflare.com/unbounded-memory-usage-by-tcp-for-receive-buffers-and-how-we-fixed-it/)
-- [Intrisec: ShadowSyndicate Infrastructure Illumination (2025)](https://www.intrinsec.com/wp-content/uploads/2025/10/TLP-CLEAR-31072025-ShadowSyndicate-infrastructure-illumination-EN.pdf)
-- [Internet Weather Report: ASN Watchlist (2025)](https://internetweather.net/asn-watchlist/)
+- [Bernat, Vincent. Coping with the TCP TIME-WAIT state on busy Linux servers (2014)](https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux)
+- [Brouer, Jesper. DDoS protection Using Netfilter/iptables (2014)](https://people.netfilter.org/hawk/presentations/dknog4/iptables-ddos-mitigation_JesperBrouer.pdf)
+- [Majkowski, Marek. Lessons from defending the indefensible (2015)](https://blackhat.com/docs/eu-15/materials/eu-15-Majkowski-Lessons-From-Defending-The-Indefensible.pdf)
+- [Majkowski, Marek. Path MTU discovery in practice (2015)](https://blog.cloudflare.com/path-mtu-discovery-in-practice)
+- [Antonakakis et al. Understanding the Mirai Botnet (2017)](https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-antonakakis.pdf)
+- [Majkowski, Marek. SYN packet handling in the wild (2018)](https://blog.cloudflare.com/syn-packet-handling-in-the-wild)
+- [Majkowski, Marek. Conntrack tales: one thousand and one flows (2020)](https://blog.cloudflare.com/conntrack-tales-one-thousand-and-one-flows/)
+- [Freemon, Mike. Unbounded memory usage by TCP for receive buffers, and how we fixed it (2023)](https://blog.cloudflare.com/unbounded-memory-usage-by-tcp-for-receive-buffers-and-how-we-fixed-it/)
+- [Bridewell, Group-IB. ShadowSyndicate: A Global Ransomware-as-a-Service Player? (2023)](https://insights.bridewell.com/hubfs/Reports/Bridewell___ShadowSyndicate_Report_2023.pdf)
+- [Intrisec. PROSPERO & Proton66: Uncovering the links between bulletproof networks (2024)](https://web.archive.org/web/20250831181619if_/https://www.intrinsec.com/wp-content/uploads/2024/11/TLP-CLEAR-PROSPERO-Proton66-Uncovering-the-links-between-bulletproof-networks.pdf)
+- [Intrisec. ShadowSyndicate Infrastructure Illumination (2025)](https://www.intrinsec.com/wp-content/uploads/2025/10/TLP-CLEAR-31072025-ShadowSyndicate-infrastructure-illumination-EN.pdf)
+- [Internet Weather Report. ASN Watchlist (2025)](https://internetweather.net/asn-watchlist/)
+- [XLab. Kimwolf Exposed: The Massive Android Botnet with 1.8 Million Infected Devices (2025)](https://blog.xlab.qianxin.com/kimwolf-botnet-en/)
+- [Group-IP. Shaping Shadows: Breaking Down New ShadowSyndicate Methods and Infrastructure (2026)](https://www.group-ib.com/blog/new-shadowsyndicate-infrastructure/)
 - [Breakglass: Block One ASN, Kill Sixteen Malware Families (2026)](https://intel.breakglass.tech/post/omegatech-bph-as202412-67-c2-servers-16-malware-families-one-subnet)
-- [Bob Rudis: Bulletproof Hosting Watch (2026)](https://ai.rud.is/tags/bulletproof/)
+- [Rudis, Bob: Bulletproof Hosting Watch (2026)](https://ai.rud.is/tags/bulletproof/)
 
 ### Acknowledgements
 
