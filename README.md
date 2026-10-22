@@ -51,9 +51,9 @@ nstat
 conntrack -L
 ```
 
-### Suggested sysctl settings
+### sysctl
 
-Drop them into `/etc/sysctl.d/99-nft-block.conf` and apply with `sysctl --system`:
+Suggestion only, drop them into `/etc/sysctl.d/99-nft-block.conf` and apply with `sysctl --system`:
 
 ```conf
 # anti-DoS
@@ -65,18 +65,6 @@ net.ipv4.tcp_min_snd_mss = 536            # CVE-2019-11479
 net.ipv4.tcp_ecn = 1                      # RFC 8087
 net.ipv4.tcp_mtu_probing = 1              # RFC 4821
 net.ipv4.tcp_shrink_window = 1            # RFC 7323
-
-# spoofing and routing hygiene
-net.ipv4.conf.all.rp_filter = 1           # RFC 3704
-net.ipv4.conf.default.rp_filter = 1       # RFC 3704
-net.ipv4.conf.all.accept_source_route = 0
-net.ipv4.conf.default.accept_source_route = 0
-net.ipv4.conf.all.accept_redirects = 0
-net.ipv4.conf.default.accept_redirects = 0
-net.ipv4.conf.all.secure_redirects = 0
-net.ipv4.conf.default.secure_redirects = 0
-net.ipv4.conf.all.send_redirects = 0
-net.ipv4.conf.default.send_redirects = 0
 ```
 
 ### Limitations
@@ -91,6 +79,8 @@ net.ipv4.conf.default.send_redirects = 0
 - [`man systemd.service`](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html)
 - [systemd Network Configuration Synchronization Points](https://systemd.io/NETWORK_ONLINE/)
 - [`man nft`](https://www.netfilter.org/projects/nftables/manpage.html), [nftables wiki](https://wiki.nftables.org/wiki-nftables/), and [Ubuntu nftables documentation](https://documentation.ubuntu.com/security/security-features/network/firewall/nftables/)
+- [jq](https://jqlang.org/), [netfilter](https://www.netfilter.org/), and [systemd](https://systemd.io/)
+- [bgp.tools](https://bgp.tools/) and [Pulsedive](https://pulsedive.com/)
 
 ### Further reading
 
@@ -111,15 +101,9 @@ net.ipv4.conf.default.send_redirects = 0
 - [Breakglass: Block One ASN, Kill Sixteen Malware Families (2026)](https://intel.breakglass.tech/post/omegatech-bph-as202412-67-c2-servers-16-malware-families-one-subnet)
 - [Rudis, Bob: Bulletproof Hosting Watch (2026)](https://ai.rud.is/tags/bulletproof/)
 
-### Acknowledgements
-
-- [bgp.tools](https://bgp.tools/)
-- [Pulsedive](https://pulsedive.com/)
-- [jq](https://jqlang.org/), [netfilter](https://www.netfilter.org/), and [systemd](https://systemd.io/)
-
 ### AI Usage
 
-[Qwen3.8-27b](https://huggingface.co/Qwen/Qwen3.8-27B) and [Qwen3.8-Flash-Next](https://qwen.ai/blog?id=qwen3.8-flash-next)
+[Qwen3.8-27b](https://huggingface.co/Qwen/Qwen3.8-27B), [Qwen3.8-Flash-Next](https://qwen.ai/blog?id=qwen3.8-flash-next), and [Claude Opus](https://www.anthropic.com/news/claude-opus-5).
 
 ### License
 
